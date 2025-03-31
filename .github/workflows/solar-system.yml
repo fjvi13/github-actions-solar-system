@@ -122,3 +122,25 @@ jobs:
         - name: Fetch Kubernetes Cluster Details 
           run: |
             kubectl version -o yaml
+
+        - name: Save Nginx Ingress Controller IP as a Github Environment Variable
+          run: >
+              echo "INGRESS_IP=$(kubectl -n ingress-nginx get services
+              ingress-nginx-controller -o
+              jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_ENV
+
+        - name: Replace Token in Manifest files
+          uses: cscheleiden/replace-tokens@v1
+          with:
+            tokePrefix: '_{_'
+            tokenSufix: '_}_'
+            files: '["kubernetes/development/*.yaml"]'
+          env:
+            NAMESPACE: ${{ vars.NAMESPACE }}
+            REPLICAS: ${{ vars.REPLICAS }}
+            INGRESS_IP: ${{ vars.INGRESS_IP }}
+            IMAGE: ghcr.io/${{ github.repository_owner }}/solar-system:${{ github.sha}}
+
+        - name: Check files
+          run: |
+            cat kubernetes/development/*.yaml
