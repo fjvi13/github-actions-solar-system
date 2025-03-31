@@ -130,7 +130,7 @@ jobs:
               jsonpath='{.status.loadBalancer.ingress[0].ip}')" >> $GITHUB_ENV
 
         - name: Replace Token in Manifest files
-          uses: cscheleiden/replace-tokens@v1
+          uses: cschleiden/replace-tokens@v1
           with:
             tokePrefix: '_{_'
             tokenSufix: '_}_'
