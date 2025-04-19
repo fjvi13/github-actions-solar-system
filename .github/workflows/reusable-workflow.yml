@@ -1,12 +1,11 @@
 name: Testing - Reusable Workflow
 on: 
   workflow_call:
-    imputs:
+    inputs:
       ingress-url:
         description: Provide the Ingress URL
         required: true
         type: string
-
 jobs:
   integration-test:
     runs-on: ubuntu-latest
